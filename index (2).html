@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Feed Application - Your Daily News Source</title>
+    <meta name="description" content="Stay informed with the latest breaking news, technology updates, sports, business, health, science and entertainment news.">
+    <meta name="keywords" content="news, breaking news, technology, sports, business, health, science, entertainment">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- PWA Manifest -->
+    <!-- PWA Manifest (would be external file in production) -->
+    <meta name="theme-color" content="#2563eb">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p>Loading News Feed...</p>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header__content">
+                    <!-- Logo -->
+                    <div class="header__logo">
+                        <h1 class="logo">
+                            <span class="logo__icon">📰</span>
+                            <span class="logo__text">NewsHub</span>
+                        </h1>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav class="nav" role="navigation" aria-label="Main navigation">
+                        <ul class="nav__list" id="nav-list">
+                            <li><a href="#" class="nav__link active" data-category="general" aria-current="page">📰 General</a></li>
+                            <li><a href="#" class="nav__link" data-category="technology">💻 Technology</a></li>
+                            <li><a href="#" class="nav__link" data-category="sports">⚽ Sports</a></li>
+                            <li><a href="#" class="nav__link" data-category="business">💼 Business</a></li>
+                            <li><a href="#" class="nav__link" data-category="health">🏥 Health</a></li>
+                            <li><a href="#" class="nav__link" data-category="science">🔬 Science</a></li>
+                            <li><a href="#" class="nav__link" data-category="entertainment">🎬 Entertainment</a></li>
+                        </ul>
+                    </nav>
+
+                    <!-- Search &amp; Controls -->
+                    <div class="header__controls">
+                        <div class="search-container">
+                            <input 
+                                type="search" 
+                                id="search-input" 
+                                class="search-input" 
+                                placeholder="Search news..." 
+                                aria-label="Search news articles"
+                                autocomplete="off"
+                            >
+                            <button class="search-btn" id="search-btn" aria-label="Search">
+                                🔍
+                            </button>
+                        </div>
+                        
+                        <button class="btn-icon" id="bookmarks-btn" aria-label="View bookmarks" title="Bookmarks">
+                            🔖
+                        </button>
+                        
+                        <button class="btn-icon" id="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                            🌙
+                        </button>
+
+                        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">
+                            <span class="hamburger"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Breaking News Carousel -->
+                <section class="breaking-news" id="breaking-news" aria-label="Breaking news">
+                    <div class="breaking-news__header">
+                        <h2 class="breaking-news__title">🚨 Breaking News</h2>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn carousel-btn--prev" id="carousel-prev" aria-label="Previous news">
+                                ←
+                            </button>
+                            <button class="carousel-btn carousel-btn--next" id="carousel-next" aria-label="Next news">
+                                →
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel" id="breaking-carousel">
+                        <div class="carousel__track" id="carousel-track">
+                            <!-- Breaking news items will be inserted here -->
+                        </div>
+                        <div class="carousel__indicators" id="carousel-indicators">
+                            <!-- Indicators will be inserted here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Category Filter Info -->
+                <section class="category-info" id="category-info">
+                    <h2 id="category-title">📰 General News</h2>
+                    <p id="category-description">Latest news from all categories</p>
+                </section>
+
+                <!-- Search Results -->
+                <section class="search-results hidden" id="search-results">
+                    <div class="search-results__header">
+                        <h2 id="search-results-title">Search Results</h2>
+                        <button class="btn btn--secondary" id="clear-search">Clear Search</button>
+                    </div>
+                    <div class="search-results__count" id="search-count"></div>
+                </section>
+
+                <!-- News Feed -->
+                <section class="news-feed" id="news-feed" aria-label="News articles">
+                    <div class="news-grid" id="news-grid">
+                        <!-- News articles will be inserted here -->
+                    </div>
+                    
+                    <!-- Load More Button -->
+                    <div class="load-more-container">
+                        <button class="btn btn--secondary" id="load-more-btn">Load More Articles</button>
+                    </div>
+                    
+                    <!-- Loading Skeleton -->
+                    <div class="loading-skeleton hidden" id="loading-skeleton">
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                    </div>
+                </section>
+
+                <!-- Bookmarks Section -->
+                <section class="bookmarks hidden" id="bookmarks-section">
+                    <div class="bookmarks__header">
+                        <h2>🔖 Your Bookmarks</h2>
+                        <button class="btn btn--secondary" id="close-bookmarks">Close</button>
+                    </div>
+                    <div class="bookmarks__content" id="bookmarks-content">
+                        <div class="bookmarks__empty" id="bookmarks-empty">
+                            <p>No bookmarks yet. Start bookmarking articles you want to read later!</p>
+                        </div>
+                        <div class="bookmarks__list" id="bookmarks-list">
+                            <!-- Bookmarked articles will be inserted here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Article Modal -->
+        <div class="modal-overlay hidden" id="article-modal">
+            <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+                <div class="modal__header">
+                    <button class="modal__close" id="close-modal" aria-label="Close article">
+                        ×
+                    </button>
+                    <div class="modal__actions">
+                        <button class="btn-icon" id="bookmark-article" aria-label="Bookmark article" title="Bookmark">
+                            🔖
+                        </button>
+                        <button class="btn-icon" id="share-article" aria-label="Share article" title="Share">
+                            📤
+                        </button>
+                    </div>
+                </div>
+                <div class="modal__content" id="modal-content">
+                    <!-- Article content will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Modal -->
+        <div class="modal-overlay hidden" id="share-modal">
+            <div class="modal modal--small" role="dialog" aria-labelledby="share-title">
+                <div class="modal__header">
+                    <h3 id="share-title">Share Article</h3>
+                    <button class="modal__close" id="close-share-modal" aria-label="Close share">
+                        ×
+                    </button>
+                </div>
+                <div class="modal__content">
+                    <div class="share-options" id="share-options">
+                        <button class="share-btn" data-platform="facebook" aria-label="Share on Facebook">
+                            📘 Facebook
+                        </button>
+                        <button class="share-btn" data-platform="twitter" aria-label="Share on Twitter">
+                            🐦 Twitter
+                        </button>
+                        <button class="share-btn" data-platform="linkedin" aria-label="Share on LinkedIn">
+                            💼 LinkedIn
+                        </button>
+                        <button class="share-btn" data-platform="whatsapp" aria-label="Share on WhatsApp">
+                            💬 WhatsApp
+                        </button>
+                    </div>
+                    <div class="share-url">
+                        <label for="share-url-input">Article URL:</label>
+                        <div class="share-url__container">
+                            <input type="text" id="share-url-input" readonly class="form-control">
+                            <button class="btn btn--primary" id="copy-url">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toast-container"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer__content">
+                    <div class="footer__section">
+                        <h3>NewsHub</h3>
+                        <p>Your trusted source for breaking news and comprehensive coverage.</p>
+                    </div>
+                    <div class="footer__section">
+                        <h4>Features</h4>
+                        <ul>
+                            <li>Breaking News</li>
+                            <li>Category Filtering</li>
+                            <li>Search Articles</li>
+                            <li>Social Sharing</li>
+                            <li>Offline Reading</li>
+                        </ul>
+                    </div>
+                    <div class="footer__section">
+                        <h4>About</h4>
+                        <ul>
+                            <li>Phase 1: Requirements ✅</li>
+                            <li>Phase 2: Architecture ✅</li>
+                            <li>Phase 3: MVP Implementation ✅</li>
+                            <li>Phase 4: Enhancements ✅</li>
+                            <li>Phase 5: Documentation ✅</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer__bottom">
+                    <p>&copy; 2025 NewsHub. Built with modern web technologies.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
